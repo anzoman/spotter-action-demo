@@ -7,14 +7,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@master
 
-      - name: Scan Ansible content with different inputs
+      - name: Scan Ansible content
         uses: xlab-steampunk/spotter-action@master
         with:
           paths: .
           upload_values: true
           upload_metadata: true
-          display_level: error
-          no_docs_url: true
           ansible_version: 2.14
         env:
           SPOTTER_USERNAME: ${{ secrets.SPOTTER_USERNAME }}
