@@ -1,0 +1,808 @@
+{
+  "environment": {
+    "python_version": "3.10.6",
+    "ansible_version": {
+      "ansible_core": "2.14",
+      "ansible_base": null,
+      "ansible": null
+    },
+    "installed_collections": [],
+    "ansible_config": {},
+    "galaxy_yml": {},
+    "collection_requirements": {
+      "collections": [
+        {
+          "name": "ansible.posix",
+          "version": "1.4.0"
+        },
+        {
+          "name": "community.docker",
+          "version": "3.1.0"
+        },
+        {
+          "name": "community.crypto",
+          "version": "2.7.0"
+        },
+        {
+          "name": "community.general",
+          "version": "5.7.0"
+        }
+      ]
+    },
+    "cli_scan_args": {
+      "parse_values": true,
+      "upload_values": true,
+      "upload_metadata": true,
+      "rewrite": false,
+      "display_level": "hint"
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "8350ea5b-7e86-4b0e-ab7f-8569318d96e9",
+      "task_args": {
+        "name": "Include distro-specific variables",
+        "ansible.builtin.include_vars": {
+          "file": "{{ ansible_distribution }}.yml"
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/system/tasks/main.yml",
+        "line": 2,
+        "column": 3,
+        "start_mark_index": 6,
+        "end_mark_index": 122
+      }
+    },
+    {
+      "task_id": "e3d3c440-17f9-4317-8108-1d1131b05b72",
+      "task_args": {
+        "name": "Use epel",
+        "ansible.builtin.package": {
+          "name": "epel-release",
+          "state": "present"
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/system/tasks/main.yml",
+        "line": 8,
+        "column": 7,
+        "start_mark_index": 184,
+        "end_mark_index": 282
+      }
+    },
+    {
+      "task_id": "c40d94aa-5b61-4d59-aa1d-c75db88b7232",
+      "task_args": {
+        "name": "Install base system packages",
+        "ansible.builtin.package": {
+          "name": "{{ packages }}"
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/system/tasks/main.yml",
+        "line": 14,
+        "column": 3,
+        "start_mark_index": 324,
+        "end_mark_index": 414
+      }
+    },
+    {
+      "task_id": "34198628-75ec-4b3c-b9be-00a21231d241",
+      "task_args": {
+        "name": "Increase inotify limit",
+        "ansible.posix.sysctl": {
+          "name": "fs.inotify.max_user_watches",
+          "value": "524288",
+          "sysctl_file": "/etc/sysctl.d/50-inotify.conf",
+          "reload": true
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/system/tasks/main.yml",
+        "line": 18,
+        "column": 3,
+        "start_mark_index": 416,
+        "end_mark_index": 592
+      }
+    },
+    {
+      "task_id": "fa3eb583-38e6-45d9-a068-1f98aa387ac8",
+      "task_args": {
+        "name": "Make sure firewalld is started",
+        "ansible.builtin.service": {
+          "name": "firewalld",
+          "state": "started",
+          "enabled": true
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/system/tasks/main.yml",
+        "line": 27,
+        "column": 7,
+        "start_mark_index": 655,
+        "end_mark_index": 797
+      }
+    },
+    {
+      "task_id": "fb5c4ac7-ef0a-4950-a96f-8fc02da21a81",
+      "task_args": {
+        "name": "Whitelist services",
+        "ansible.posix.firewalld": {
+          "service": "{{ item }}",
+          "permanent": true,
+          "immediate": true,
+          "state": "enabled"
+        },
+        "loop": [
+          "ssh",
+          "http",
+          "https"
+        ]
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/system/tasks/main.yml",
+        "line": 33,
+        "column": 7,
+        "start_mark_index": 799,
+        "end_mark_index": 1018
+      }
+    },
+    {
+      "task_id": "9710ace7-3be0-4206-a623-eae510aba1ca",
+      "task_args": {
+        "name": "Disable selinux",
+        "ansible.posix.selinux": {
+          "state": "disabled"
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/system/tasks/main.yml",
+        "line": 44,
+        "column": 7,
+        "start_mark_index": 1020,
+        "end_mark_index": 1106
+      }
+    },
+    {
+      "task_id": "b41bb8b3-3ece-4e0c-8b60-df25375804ff",
+      "task_args": {
+        "name": "Make sure ufw is started",
+        "ansible.builtin.service": {
+          "name": "ufw",
+          "state": "started",
+          "enabled": true
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/system/tasks/main.yml",
+        "line": 51,
+        "column": 7,
+        "start_mark_index": 1209,
+        "end_mark_index": 1339
+      }
+    },
+    {
+      "task_id": "d6e4fa48-eeea-4351-894a-099e47b31fb2",
+      "task_args": {
+        "name": "Blacklist everything incoming",
+        "community.general.ufw": {
+          "state": "enabled",
+          "direction": "incoming",
+          "policy": "deny"
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/system/tasks/main.yml",
+        "line": 57,
+        "column": 7,
+        "start_mark_index": 1341,
+        "end_mark_index": 1483
+      }
+    },
+    {
+      "task_id": "10e65419-1dad-4fdb-939a-ccb52ce6dc2b",
+      "task_args": {
+        "name": "Whitelist services",
+        "community.general.ufw": {
+          "rule": "allow",
+          "port": "{{ item }}",
+          "proto": "tcp"
+        },
+        "loop": [
+          22,
+          80,
+          443
+        ]
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/system/tasks/main.yml",
+        "line": 63,
+        "column": 7,
+        "start_mark_index": 1485,
+        "end_mark_index": 1659
+      }
+    },
+    {
+      "task_id": "c451cbea-3aed-4639-ad68-7f593864d477",
+      "task_args": {
+        "name": "Add the Docker yum repository",
+        "ansible.builtin.yum_repository": {
+          "name": "docker-stable",
+          "description": "Docker Stable",
+          "baseurl": "https://download.docker.com/linux/centos/$releasever/$basearch/stable",
+          "gpgkey": "https://download.docker.com/linux/centos/gpg"
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/docker/tasks/main.yml",
+        "line": 4,
+        "column": 7,
+        "start_mark_index": 62,
+        "end_mark_index": 353
+      }
+    },
+    {
+      "task_id": "c04304ed-953a-4109-8ae9-576ebfa18248",
+      "task_args": {
+        "name": "Install apt prerequisites",
+        "ansible.builtin.package": {
+          "name": [
+            "apt-transport-https"
+          ],
+          "state": "present"
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/docker/tasks/main.yml",
+        "line": 14,
+        "column": 7,
+        "start_mark_index": 451,
+        "end_mark_index": 588
+      }
+    },
+    {
+      "task_id": "e581264e-6ecd-4a1e-8b51-78e8e8fab4a3",
+      "task_args": {
+        "name": "Add the Docker apt key",
+        "ansible.builtin.apt_key": {
+          "url": "https://download.docker.com/linux/debian/gpg",
+          "state": "present"
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/docker/tasks/main.yml",
+        "line": 20,
+        "column": 7,
+        "start_mark_index": 590,
+        "end_mark_index": 738
+      }
+    },
+    {
+      "task_id": "28f970d2-59e2-4dfd-9070-f44ad81fbeb4",
+      "task_args": {
+        "name": "Add the Docker apt repository",
+        "ansible.builtin.apt_repository": {
+          "repo": "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable",
+          "state": "present",
+          "update_cache": true
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/docker/tasks/main.yml",
+        "line": 25,
+        "column": 7,
+        "start_mark_index": 740,
+        "end_mark_index": 982
+      }
+    },
+    {
+      "task_id": "f110b0bf-adbd-47e1-96e8-cbb5396759a6",
+      "task_args": {
+        "name": "Install Docker packages",
+        "ansible.builtin.package": {
+          "name": [
+            "docker-ce"
+          ],
+          "state": "present"
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/docker/tasks/main.yml",
+        "line": 32,
+        "column": 3,
+        "start_mark_index": 1024,
+        "end_mark_index": 1129
+      }
+    },
+    {
+      "task_id": "780a6291-6922-432c-9149-d48d47e37bfc",
+      "task_args": {
+        "name": "Create the Docker volume base directory",
+        "ansible.builtin.file": {
+          "path": "{{ docker_data_dir }}",
+          "mode": "u=rwx,g=rx,o=rx",
+          "state": "directory",
+          "follow": false
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/docker/tasks/main.yml",
+        "line": 38,
+        "column": 3,
+        "start_mark_index": 1131,
+        "end_mark_index": 1301
+      }
+    },
+    {
+      "task_id": "7ac5344e-8444-4b22-9e0a-b04b0929a2e9",
+      "task_args": {
+        "name": "Ensure the docker config directory exists",
+        "ansible.builtin.file": {
+          "path": "/etc/docker/",
+          "mode": "u=rwx,g=rx,o=rx",
+          "state": "directory",
+          "follow": false
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/docker/tasks/main.yml",
+        "line": 45,
+        "column": 3,
+        "start_mark_index": 1303,
+        "end_mark_index": 1464
+      }
+    },
+    {
+      "task_id": "0c2ac579-cc6c-4201-977b-8cee54aba21a",
+      "task_args": {
+        "name": "Configure dockerd",
+        "ansible.builtin.copy": {
+          "content": "{\n  \"data-root\": \"{{ docker_data_dir }}\",\n  \"default-address-pools\" : {{ address_pools | to_json }}\n}\n",
+          "dest": "/etc/docker/daemon.json",
+          "mode": "u=rw,g=r,o=r"
+        },
+        "register": "dockerd_config"
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/docker/tasks/main.yml",
+        "line": 52,
+        "column": 3,
+        "start_mark_index": 1466,
+        "end_mark_index": 1760
+      }
+    },
+    {
+      "task_id": "ee3e0767-8072-44c5-98d2-af08fc177761",
+      "task_args": {
+        "name": "Enable the Docker daemon",
+        "ansible.builtin.service": {
+          "name": "docker",
+          "enabled": true
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/docker/tasks/main.yml",
+        "line": 64,
+        "column": 3,
+        "start_mark_index": 1762,
+        "end_mark_index": 1856
+      }
+    },
+    {
+      "task_id": "9a860906-f075-4a94-b378-0b97cbabe7ca",
+      "task_args": {
+        "name": "Start the Docker daemon",
+        "ansible.builtin.service": {
+          "name": "docker",
+          "state": "started"
+        },
+        "register": "dockerd_started"
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/docker/tasks/main.yml",
+        "line": 69,
+        "column": 3,
+        "start_mark_index": 1858,
+        "end_mark_index": 1980
+      }
+    },
+    {
+      "task_id": "3e6d3631-9ec4-4fe8-b62d-670cd0c4106b",
+      "task_args": {
+        "name": "Restart the Docker daemon",
+        "ansible.builtin.service": {
+          "name": "docker",
+          "state": "restarted"
+        },
+        "when": "dockerd_config is changed and dockerd_started is not changed"
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/docker/tasks/main.yml",
+        "line": 75,
+        "column": 3,
+        "start_mark_index": 1982,
+        "end_mark_index": 2148
+      }
+    },
+    {
+      "task_id": "850422ca-24e0-48f0-ad50-6e6064361a53",
+      "task_args": {
+        "name": "Create the destination directory",
+        "ansible.builtin.file": {
+          "path": "/tmp/dockerbuild/",
+          "state": "directory",
+          "follow": false
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/webpage/tasks/main.yml",
+        "line": 2,
+        "column": 3,
+        "start_mark_index": 6,
+        "end_mark_index": 137
+      }
+    },
+    {
+      "task_id": "5d0c11ac-8838-4c1f-bd59-8a923b7c24a3",
+      "task_args": {
+        "name": "Install docker-py",
+        "ansible.builtin.pip": {
+          "name": [
+            "docker-py",
+            "requests<2.28",
+            "websocket-client<1.0.0"
+          ],
+          "state": "present",
+          "editable": false
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/webpage/tasks/main.yml",
+        "line": 8,
+        "column": 3,
+        "start_mark_index": 139,
+        "end_mark_index": 332
+      }
+    },
+    {
+      "task_id": "d0a35e58-995c-46e6-8597-6de33a3bdcef",
+      "task_args": {
+        "name": "Copy over build files",
+        "ansible.builtin.template": {
+          "src": "{{ item }}",
+          "dest": "/tmp/dockerbuild/"
+        },
+        "with_items": [
+          "Dockerfile",
+          "index.html"
+        ]
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/webpage/tasks/main.yml",
+        "line": 18,
+        "column": 3,
+        "start_mark_index": 334,
+        "end_mark_index": 489
+      }
+    },
+    {
+      "task_id": "af42b0af-8542-471a-acb6-a06070f5323d",
+      "task_args": {
+        "name": "Build the image",
+        "community.docker.docker_image": {
+          "name": "local/webpage",
+          "path": "/tmp/dockerbuild/",
+          "state": "build",
+          "force": true
+        },
+        "register": "image_build"
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/webpage/tasks/main.yml",
+        "line": 26,
+        "column": 3,
+        "start_mark_index": 491,
+        "end_mark_index": 656
+      }
+    },
+    {
+      "task_id": "0552e6f9-c0bf-437e-a306-58b5654ce693",
+      "task_args": {
+        "name": "Run the container",
+        "community.docker.docker_container": {
+          "name": "webpage",
+          "image": "local/webpage",
+          "ports": [
+            "127.0.0.1:12345:80"
+          ],
+          "state": "started",
+          "restart_policy": "always"
+        },
+        "register": "container_start"
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/webpage/tasks/main.yml",
+        "line": 34,
+        "column": 3,
+        "start_mark_index": 658,
+        "end_mark_index": 891
+      }
+    },
+    {
+      "task_id": "52fef0fd-eddd-4249-9c2f-516640fc1292",
+      "task_args": {
+        "name": "Restart the container if necessary",
+        "community.docker.docker_container": {
+          "name": "webpage",
+          "image": "local/webpage",
+          "ports": [
+            "127.0.0.1:12345:80"
+          ],
+          "state": "restarted",
+          "restart_policy": "always"
+        },
+        "when": "image_build is changed and container_start is not changed"
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/webpage/tasks/main.yml",
+        "line": 44,
+        "column": 3,
+        "start_mark_index": 893,
+        "end_mark_index": 1082
+      }
+    },
+    {
+      "task_id": "8cf8540d-6a7f-4c6e-a84f-d0b3bd730c89",
+      "task_args": {
+        "name": "Install nginx and prerequisites",
+        "ansible.builtin.package": {
+          "name": [
+            "nginx",
+            "python-pip"
+          ],
+          "state": "present"
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/nginx-with-ssl/tasks/main.yml",
+        "line": 2,
+        "column": 3,
+        "start_mark_index": 6,
+        "end_mark_index": 201
+      }
+    },
+    {
+      "task_id": "7f1cb195-10b0-4897-a3ed-88916dd3ddad",
+      "task_args": {
+        "name": "Install Ansible module prerequisites",
+        "ansible.builtin.pip": {
+          "name": [
+            "pyopenssl==18.0.0",
+            "cryptography<3.4,>=2.1.4",
+            "certifi<=2020.4.5.1"
+          ],
+          "state": "present"
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/nginx-with-ssl/tasks/main.yml",
+        "line": 10,
+        "column": 3,
+        "start_mark_index": 203,
+        "end_mark_index": 517
+      }
+    },
+    {
+      "task_id": "6a630182-8901-48ab-bcba-ffda7137c1f6",
+      "task_args": {
+        "name": "Generate dhparams",
+        "ansible.builtin.shell": "openssl dhparam -out /etc/nginx/dhparams.pem 1024",
+        "args": {
+          "creates": "/etc/nginx/dhparams.pem"
+        },
+        "register": "dhparams"
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/nginx-with-ssl/tasks/main.yml",
+        "line": 19,
+        "column": 3,
+        "start_mark_index": 519,
+        "end_mark_index": 685
+      }
+    },
+    {
+      "task_id": "dcd887f8-f640-4735-9b2f-4fe714b3c577",
+      "task_args": {
+        "name": "Generate a private key",
+        "community.crypto.openssl_privatekey": {
+          "path": "/etc/nginx/ssl-nginx.key",
+          "size": 2048
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/nginx-with-ssl/tasks/main.yml",
+        "line": 25,
+        "column": 3,
+        "start_mark_index": 687,
+        "end_mark_index": 820
+      }
+    },
+    {
+      "task_id": "dd48cf78-29c8-493b-a0df-e18a1b72418e",
+      "task_args": {
+        "name": "Create a CSR",
+        "community.crypto.openssl_csr": {
+          "path": "/etc/nginx/ssl-nginx.csr",
+          "privatekey_path": "/etc/nginx/ssl-nginx.key",
+          "commonName": "{{ ansible_hostname }}"
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/nginx-with-ssl/tasks/main.yml",
+        "line": 30,
+        "column": 3,
+        "start_mark_index": 822,
+        "end_mark_index": 995
+      }
+    },
+    {
+      "task_id": "91501007-4d49-4c63-9db1-2b232e25349d",
+      "task_args": {
+        "name": "Generate a Self Signed OpenSSL certificate",
+        "community.crypto.x509_certificate": {
+          "path": "/etc/nginx/ssl-nginx.crt",
+          "provider": "selfsigned",
+          "privatekey_path": "/etc/nginx/ssl-nginx.key",
+          "csr_path": "/etc/nginx/ssl-nginx.csr"
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/nginx-with-ssl/tasks/main.yml",
+        "line": 36,
+        "column": 3,
+        "start_mark_index": 997,
+        "end_mark_index": 1214
+      }
+    },
+    {
+      "task_id": "71c2ae9a-6efe-4490-8275-2b570cd44cfa",
+      "task_args": {
+        "name": "Ensure that the server certificate is valid after one year - fail if it will expire",
+        "community.crypto.x509_certificate": {
+          "path": "/etc/nginx/ssl-nginx.crt",
+          "provider": "assertonly",
+          "valid_in": 31536000
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/nginx-with-ssl/tasks/main.yml",
+        "line": 43,
+        "column": 3,
+        "start_mark_index": 1216,
+        "end_mark_index": 1413
+      }
+    },
+    {
+      "task_id": "20bd724e-0e8e-4108-a531-9a332e4523e3",
+      "task_args": {
+        "name": "Template out the nginx config file",
+        "ansible.builtin.template": {
+          "src": "nginx-{{ ansible_distribution }}.conf",
+          "dest": "/etc/nginx/nginx.conf",
+          "mode": "u=rw,g=rw,o=r"
+        },
+        "register": "nginx_config"
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/nginx-with-ssl/tasks/main.yml",
+        "line": 49,
+        "column": 3,
+        "start_mark_index": 1415,
+        "end_mark_index": 1615
+      }
+    },
+    {
+      "task_id": "f6b24f63-fc37-4abc-94f3-cb66c35480f7",
+      "task_args": {
+        "name": "Template out the nginx server file",
+        "ansible.builtin.template": {
+          "src": "server.conf",
+          "dest": "/etc/nginx/conf.d/server.conf"
+        },
+        "register": "nginx_server"
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/nginx-with-ssl/tasks/main.yml",
+        "line": 56,
+        "column": 3,
+        "start_mark_index": 1617,
+        "end_mark_index": 1775
+      }
+    },
+    {
+      "task_id": "52a8543e-72db-4e0d-b360-6c8a87aee183",
+      "task_args": {
+        "name": "Enable nginx",
+        "ansible.builtin.service": {
+          "name": "nginx",
+          "state": "started",
+          "enabled": true
+        }
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/nginx-with-ssl/tasks/main.yml",
+        "line": 62,
+        "column": 3,
+        "start_mark_index": 1777,
+        "end_mark_index": 1877
+      }
+    },
+    {
+      "task_id": "aa2f5b7a-dcd3-4f41-8783-1d92ece8c034",
+      "task_args": {
+        "name": "Start nginx",
+        "ansible.builtin.service": {
+          "name": "nginx",
+          "state": "started"
+        },
+        "register": "nginx_started"
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/nginx-with-ssl/tasks/main.yml",
+        "line": 68,
+        "column": 3,
+        "start_mark_index": 1879,
+        "end_mark_index": 1986
+      }
+    },
+    {
+      "task_id": "d040f735-be56-4d3f-b4e6-1975ca4a54ce",
+      "task_args": {
+        "name": "Restart nginx if necessary",
+        "ansible.builtin.service": {
+          "name": "nginx",
+          "state": "restarted"
+        },
+        "when": [
+          "dhparams is changed or nginx_config is changed or nginx_server is changed",
+          "nginx_started is not changed"
+        ]
+      },
+      "spotter_metadata": {
+        "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/roles/nginx-with-ssl/tasks/main.yml",
+        "line": 74,
+        "column": 3,
+        "start_mark_index": 1988,
+        "end_mark_index": 2208
+      }
+    }
+  ],
+  "playbooks": [
+    {
+      "playbook_id": "6905dab3-0bf2-41f7-8ff9-688cb4305747",
+      "plays": [
+        {
+          "play_id": "5d1d8cd2-1e2a-4f26-8973-b46a719fb648",
+          "play_args": {
+            "hosts": "all",
+            "sudo": true,
+            "roles": [
+              "system",
+              "nginx-with-ssl",
+              "docker",
+              "webpage"
+            ]
+          },
+          "spotter_metadata": {
+            "file": "/home/anzeluzar/Desktop/steampunk-spotter/playbook-examples/scenarios/upgrade-2.4-to-2.14/playbook.yml",
+            "line": 2,
+            "column": 3,
+            "start_mark_index": 6,
+            "end_mark_index": 100
+          }
+        }
+      ]
+    }
+  ]
+}
