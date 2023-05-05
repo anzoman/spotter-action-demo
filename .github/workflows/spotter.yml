@@ -11,9 +11,10 @@ jobs:
         uses: xlab-steampunk/spotter-action@master
         with:
           paths: .
-          upload_values: true
-          upload_metadata: true
+          include_values: true
+          include_metadata: true
           ansible_version: 2.14
+          profile: full
         env:
           SPOTTER_USERNAME: ${{ secrets.SPOTTER_USERNAME }}
           SPOTTER_PASSWORD: ${{ secrets.SPOTTER_PASSWORD }}
