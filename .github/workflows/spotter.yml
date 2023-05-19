@@ -12,9 +12,7 @@ jobs:
         with:
           paths: .
           include_values: true
-          include_metadata: true
           ansible_version: 2.14
           profile: full
         env:
-          SPOTTER_USERNAME: ${{ secrets.SPOTTER_USERNAME }}
-          SPOTTER_PASSWORD: ${{ secrets.SPOTTER_PASSWORD }}
+          SPOTTER_API_TOKEN: ${{ secrets.SPOTTER_API_TOKEN }}
