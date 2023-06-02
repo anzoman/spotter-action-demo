@@ -8,7 +8,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Scan Ansible content
-        uses: xlab-steampunk/spotter-action@1.1.1
+        uses: xlab-steampunk/spotter-action@2.0.0
         with:
           paths: .
           include_values: true
