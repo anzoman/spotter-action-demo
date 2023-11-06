@@ -5,17 +5,13 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout this repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@master
 
-      - name: Setup Python
-        uses: actions/setup-python@v3
+      - name: Scan Ansible content
+        uses: xlab-steampunk/spotter-action@2.5.0
         with:
-          python-version: 3.11
-
-      - name: Install steampunk-spotter
-        run: pip install steampunk-spotter
-
-      - name: Run Spotter scan
-        run: spotter scan .
+          paths: .
+          ansible_version: 2.15
+          profile: full
         env:
           SPOTTER_API_TOKEN: ${{ secrets.SPOTTER_API_TOKEN }}
