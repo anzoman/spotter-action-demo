@@ -10,8 +10,7 @@ jobs:
       - name: Setup Python 3.12
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
-          cache: 'pip'
+          python-version: "3.12"
 
       - name: Install steampunk-spotter
         run: pip install steampunk-spotter
