@@ -8,6 +8,6 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run Ansible content scan
-        uses: xlab-steampunk/spotter-action@2.6.0
+        uses: xlab-steampunk/spotter-action@3.0.0
         env:
-          SPOTTER_API_TOKEN: ${{ secrets.SPOTTER_API_TOKEN }}
+          SPOTTER_TOKEN: ${{ secrets.SPOTTER_API_TOKEN }}
